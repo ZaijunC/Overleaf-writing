@@ -1,0 +1,97 @@
+\documentclass[11pt]{article}
+
+% ---------- Packages ----------
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{authblk}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\graphicspath{{figures/}}
+
+% Placeholder helper: red [TODO: ...] so gaps are easy to spot
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+% ---------- Title & authors ----------
+\title{\todo{Paper title}}
+
+\author[1]{Zaijun Chen\thanks{Corresponding author: \href{mailto:zaijun@berkeley.edu}{zaijun@berkeley.edu}}}
+\author[1]{\todo{Co-author}}
+\affil[1]{Department of Electrical Engineering and Computer Sciences, University of California, Berkeley, CA 94720, USA}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+% ---------- Abstract ----------
+\begin{abstract}
+\todo{Abstract: context, gap, what we did, key quantitative result, impact (150--200 words).}
+\end{abstract}
+
+% ---------- Main text ----------
+\section{Introduction}
+\todo{Motivation and background~\cite{example2024}.}
+
+\todo{Gap in the state of the art.}
+
+\todo{Our approach and key contributions.}
+
+\section{Results}
+\subsection{\todo{Concept and device}}
+\todo{Describe the architecture (Fig.~\ref{fig:concept}).}
+
+\begin{figure}[t]
+  \centering
+  % \includegraphics[width=0.9\linewidth]{fig1.pdf}
+  \fbox{\parbox[c][1.5in][c]{0.85\linewidth}{\centering Figure 1 placeholder --- put files in \texttt{figures/}}}
+  \caption{\todo{Concept figure caption.}}
+  \label{fig:concept}
+\end{figure}
+
+\subsection{\todo{Experimental demonstration}}
+\todo{Key measurement results.}
+
+\subsection{\todo{Performance and scaling}}
+\todo{Benchmarks, comparison table (Table~\ref{tab:compare}).}
+
+\begin{table}[t]
+  \centering
+  \caption{\todo{Comparison with prior work.}}
+  \label{tab:compare}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    Work & Metric 1 & Metric 2 & Metric 3 \\
+    \midrule
+    Ref.~\cite{example2024} & -- & -- & -- \\
+    This work & -- & -- & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Discussion}
+\todo{Implications, limitations, outlook.}
+
+\section{Methods}
+\subsection{\todo{Fabrication}}
+\todo{}
+\subsection{\todo{Measurement setup}}
+\todo{}
+\subsection{\todo{Data analysis}}
+\todo{}
+
+\section*{Acknowledgments}
+\todo{Funding and acknowledgments.}
+
+\section*{Data availability}
+\todo{Statement.}
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}
