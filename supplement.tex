@@ -1,0 +1,92 @@
+\documentclass[11pt]{article}
+
+% ---------- Packages ----------
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{placeins}          % \FloatBarrier: keep the figures inside the Results
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{authblk}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\graphicspath{{figures/}}
+
+% Placeholder helper: red [TODO: ...] so gaps are easy to spot
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+% ---------- Title & authors ----------
+\title{Supplementary Materials for\\[0.3em] Single-pulse in-sensor optical neuromorphic spectroscopy}
+
+\author[1,2]{Yuan Li}
+\author[1,2]{Lian Zhou}
+\author[1,2]{Ruozhou Wang}
+\author[2]{Zerui Liu}
+\author[1]{Weishan Weng}
+\author[1]{Chunho Lee}
+\author[1]{Yuyang Chen}
+\author[2]{Yuanhao Liang}
+\author[1,2]{Kaiwen Xue}
+\author[1,2]{Xinyi Ren}
+\author[2]{Wei Wu}
+\author[1,2]{Mengjie Yu}
+\author[1,2]{Zaijun Chen\thanks{Corresponding author: \href{mailto:zaijun@berkeley.edu}{zaijun@berkeley.edu}}}
+\affil[1]{Department of Electrical Engineering and Computer Sciences, University of California, Berkeley, CA 94720, USA}
+\affil[2]{Department of Electrical and Computer Engineering, University of Southern California, Los Angeles, CA 90089, USA}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{This PDF file includes:}
+\begin{itemize}\setlength{\itemsep}{0pt}
+  \item Materials and Methods
+  \item References
+\end{itemize}
+\noindent Figure numbers (Fig.~3, Fig.~4) refer to the main text.
+
+\section*{Materials and Methods}
+
+\subsection*{Optical sources and spectral processor}
+Platform characterization used a femtosecond source with a repetition rate of 100~MHz, pulses shorter than 90~fs, and a spectrum spanning 188.5--196.5~THz. The liquid, digit, and Raman experiments used this femtosecond source; the gas experiment used a separate chip-based electro-optic frequency comb operating at 9.45~GHz. For direct sensing, the source illuminated the sample and its transmitted spectrum entered the classifier. For encoded-input experiments, an input spectral shaper prepared the optical representation before the classifier stage.
+
+The packaged spectral processor contained a diffraction grating, cylindrical relay optics, and a liquid-crystal-on-silicon spatial light modulator in a 4f arrangement. Dispersed frequency components were mapped to the modulator, where programmed profiles controlled their transmission into separate output fibers. The demonstrated configuration supported four output channels connected to photodiodes. The computing throughput quoted in the abstract counts one multiply--accumulate operation per spectral channel and output: 120 channels, three outputs, and two operations per multiply--accumulate at the 9.45-GHz pulse rate of the gas experiment give $6.8 \times 10^{12}$ operations per second.
+
+\subsection*{Spectral representation and optical calibration}
+For the spectral-energy projection model, $x_i$ is the energy in input spectral channel $i$ after sample interaction or encoding, $W_{ji}$ is its effective transmission to output $j$, and $y_j$ is the weighted energy collected by that output. The corresponding optical projection is
+\begin{equation}
+  y_j = \sum_i W_{ji}\, x_i .
+  \label{eq:projection}
+\end{equation}
+The matrix elements describe effective energy transmission into the output channels. Each output therefore collects a weighted sum of the input spectral energies. The detector readout converts these optical projections into measured scores. In the gas experiment, scores were extracted at individual gated pulse positions of the oscilloscope traces, with each output channel recorded in a separate acquisition. In the liquid experiment, the two detector signals were averaged before their difference was evaluated. These readout procedures are specified separately below.
+
+For encoded-input characterization, the source spectrum was first flattened. Target input profiles were programmed onto the first shaper and measured using an optical spectrum analyzer. Measured spectra were averaged within each 10-GHz channel (784 channels for digit images and 766 for Raman spectra), and measured and target profiles were each normalized to a maximum of 1. Encoding fidelity is reported as $\sigma$, half the 16th--84th percentile range of the residual (measured minus target), in percent of full scale.
+
+\subsection*{Model training and weight programming}
+Models were trained digitally for the respective recognition tasks, and their learned profiles were programmed onto the classifier shaper before optical evaluation. Gas training inputs were generated from simulated absorption spectra; liquid training inputs were measured mixture spectra. The encoded benchmarks used vectorized MNIST images and prerecorded Raman spectra. The MNIST model was a single-layer network with restricted connectivity and four outputs. During inference, the classifier profiles remained fixed while the sample condition or encoded input changed.
+
+\subsection*{Gas spectra and pulse routing}
+Three gas cells contained acetylene at 15~Torr, acetylene at 50~Torr, and nitrogen at 740~Torr. Measurements were performed at room temperature. Training spectra were simulated using HITRAN data~\cite{gordon2022}, and 1\% random noise was added to the training inputs. The digital model provided the spectral profiles used for optical classification. The target label denoted the selected gas-cell condition, including the distinction between the two acetylene pressures.
+
+Three electro-optic intensity modulators served as optical switches (temporal gates) under synchronized arbitrary-waveform-generator control. One gas-cell path was selected during each 9.45-GHz pulse period while the classifier weights remained fixed. Each of the three classifier profiles comprised 120 spectral bins of 10~GHz spanning 195.0--196.2~THz. The gas cells were static, and gating changed which physical transmission spectrum reached the classifier. The programmed routing sequence provided the reference labels for evaluating predictions. For each gated pulse position, the three output-channel amplitudes formed the score vector. Each output channel and gas-cell path was recorded in a separate acquisition (1.5625-ps sampling, 12-GHz oscilloscope bandwidth); the traces were aligned with fixed per-channel delays, peak amplitudes were taken within each 105.8-ps slot, and the slots were interleaved according to the programmed gate sequence. The oscilloscope averaged 256 repetitions of the gate sequence to improve the signal-to-noise ratio of the traces. Per-channel linear calibration coefficients (gain and offset) were selected on the evaluated 230-pulse sequence, and the predicted class was the channel with the lowest calibrated output. The reciprocal repetition frequency gives approximately 106~ps between classification events. This interval specifies throughput; the latency from sample interaction to an electronic class label additionally includes optical propagation and readout.
+
+\subsection*{Microfluidic sample preparation and acquisition}
+Two computer-controlled syringe pumps delivered acetone and ethylenediamine to a microfluidic mixer and sampling chip. The acetone flow was held at 5000~$\mu$L/min, and the ethylenediamine flow was stepped between 435 and 814~$\mu$L/min every 200~ms, giving nominal acetone fractions of 92\% and 86\%. Training measurements comprised 20 spectra at each integer concentration percentage within 86--90\% and 91--94\% acetone, which defined the two classes. The dynamic experiment used nominal acetone fractions of 86\% and 92\%. Transmitted light was processed directly by the trained spectral shaper.
+
+The two photodiode signals were sampled at 1~MHz and averaged to an effective readout rate of 200~Hz. Their difference was used to follow changes between the programmed mixture conditions. This averaging procedure was used for the flowing-liquid experiment; pulse-resolved acquisition was used for the gas experiment.
+
+\subsection*{Encoded image and Raman inputs}
+For MNIST, grayscale images of digits 0--3 were flattened from $28 \times 28$ pixels into vectors and encoded by the input spectral shaper. The classifier shaper applied four trained output profiles, and relative detector outputs supplied the predictions. For Raman classification, previously measured spectra from the functionalized nanofinger platform~\cite{zhang2025nanofinger,liu2023} were encoded onto the optical comb. Each recorded spectrum (2300 points) was scaled to the range 0--255 and averaged over three adjacent points to give 766 channels. A single-layer model with two outputs and non-negative weights, trained on the spectral database, supplied the classifier weights. The classifier was trained on the recorded collection of 144 healthy and 386 patient spectra; 288 of these spectra (144 healthy and 144 patient) were encoded and classified optically through two outputs. The optical decision compared the two detector voltages after adding a fixed offset of 0.16~V to the healthy-class output, which compensates the gain difference between the two detection channels (Fig.~4B of the main text). In these experiments, the input shaper determined the rate at which new images or recorded spectra were loaded, independently of the optical pulse repetition rate.
+
+\subsection*{Reported performance measures}
+Accuracy is the fraction of evaluated predictions assigned to the reference class. True-positive and true-negative rates are the fractions of patient and healthy spectra assigned to their respective classes. Raman performance is reported using these two class-specific measures. Confusion-matrix entries in Figs.~3 and 4 of the main text are normalized within each true class. The gas classification event rate is the rate of individually resolved optical score vectors, with one vector associated with each gated pulse position. The event interval is calculated from the repetition frequency and is distinct from end-to-end electronic label latency.
+
+% ---------- References ----------
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}
